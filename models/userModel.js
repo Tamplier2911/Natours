@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -12,9 +13,10 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Please enter your email.'],
+    trim: true,
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail(), 'Email must match validation.']
+    validate: [validator.isEmail, 'Email must match validation.']
   },
   photo: {
     type: String,
@@ -28,13 +30,27 @@ const userSchema = new mongoose.Schema({
   },
   passwordConfirm: {
     type: String,
-    required: [true, 'Please confirm your password.']
+    required: [true, 'Please confirm your password.'],
+    // keep in mind, that this is ONLY going to work on create and save.
+    validate: {
+      validator: function(el) {
+        return el === this.password;
+      },
+      message: 'Confirmation password must match original.'
+    }
   },
   createdAt: {
     type: Date,
     default: Date.now(),
     select: false
   }
+});
+
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+  next();
 });
 
 const User = mongoose.model('User', userSchema);
