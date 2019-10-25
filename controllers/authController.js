@@ -1,3 +1,4 @@
+const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs');
 
@@ -57,4 +58,34 @@ exports.login = catchAsync(async (req, res, next) => {
     status: 'success',
     token
   });
+});
+
+exports.protect = catchAsync(async (req, res, next) => {
+  // Get token and check if it exists.
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    return next(
+      new AppError('You have to login, in order to view this route.', 401)
+    );
+  }
+
+  // Verification of token. If token correct -returns object with id of the user.
+  // { id: '5db1b0aca0a9f72504ef5eb9', iat: 1572020435, exp: 1579796435 }
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+  console.log(token);
+  console.log(decoded);
+
+  // Check if user still exists.
+
+  // Check if user changed password after then token was issued.
+
+  next();
 });

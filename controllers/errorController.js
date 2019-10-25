@@ -20,6 +20,22 @@ const handleValidationErrorDB = err => {
   return new AppError(message, 400);
 };
 
+// JWT Error
+const handleJWTError = err => {
+  const message = `${err.message[0].toUpperCase()}${err.message.slice(
+    1
+  )}, please log in again.`;
+  return new AppError(message, 401);
+};
+
+// JWT Exired
+const handleJWTExired = err => {
+  const message = `${err.message.toUpperCase().slice(0, 3)} ${err.message.slice(
+    4
+  )}, please try to relog.`;
+  return new AppError(message, 401);
+};
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -68,7 +84,13 @@ module.exports = (err, req, res, next) => {
       error = handleDuplicateFieldDB(error);
       sendErrorProd(error, res);
     } else if (error.name === 'ValidationError') {
-      error = handleValidationErrorDB(err);
+      error = handleValidationErrorDB(error);
+      sendErrorProd(error, res);
+    } else if (err.name === 'JsonWebTokenError') {
+      error = handleJWTError(error);
+      sendErrorProd(error, res);
+    } else if (err.name === 'TokenExpiredError') {
+      error = handleJWTExired(error);
       sendErrorProd(error, res);
     } else {
       sendErrorProd(err, res);
