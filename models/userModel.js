@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema({
       message: 'Confirmation password must match original.'
     }
   },
+  passwordChangedAt: Date,
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -61,6 +62,22 @@ userSchema.methods.correctPassword = async function(
   userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+userSchema.methods.changePasswordAfter = function(JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+
+    // if JWT less than Changed - then return true (password was changed)
+    // if JWT greater than Changed - then return false (password was not changed before issuing)
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  // false means password has not been changed
+  return false;
 };
 
 const User = mongoose.model('User', userSchema);

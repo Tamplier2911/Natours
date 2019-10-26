@@ -18,7 +18,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     photo: req.body.photo || 'https://bit.ly/2oa8ScE',
     password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm
+    passwordConfirm: req.body.passwordConfirm,
+    passwordChangedAt: req.body.passwordChangedAt //////////////
   });
 
   const token = signToken(newUser._id);
@@ -28,7 +29,12 @@ exports.signup = catchAsync(async (req, res, next) => {
     token,
     data: {
       // user: newUser
-      user: { id: newUser._id, name: newUser.name, email: newUser.email }
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        passwordChangedAt: newUser.passwordChangedAt ///////////
+      }
     }
   });
 });
@@ -77,15 +83,28 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   // Verification of token. If token correct -returns object with id of the user.
-  // { id: '5db1b0aca0a9f72504ef5eb9', iat: 1572020435, exp: 1579796435 }
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  console.log(token);
-  console.log(decoded);
+  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkYjFiMGFjYTBhOW...
+  // console.log(token);
+  // { id: '5db1b0aca0a9f72504ef5eb9', iat: 1572020435, exp: 1579796435 }
+  // console.log(decoded);
 
   // Check if user still exists.
+  const currentUser = await User.findById(decoded.id);
+
+  if (!currentUser) {
+    return next(new AppError('User with that ID is no longer exists.', 401));
+  }
 
   // Check if user changed password after then token was issued.
+  if (currentUser.changePasswordAfter(decoded.iat)) {
+    return next(
+      new AppError('User recently changed password. Please log in again.', 401)
+    );
+  }
 
+  // Grant access to protected route
+  req.user = currentUser;
   next();
 });
