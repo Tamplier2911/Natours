@@ -18,8 +18,11 @@ exports.signup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     photo: req.body.photo || 'https://bit.ly/2oa8ScE',
     password: req.body.password,
+    // use following in order to play with pass change data   !!! IMPORTANT
+    // or let user set role when signing up
     passwordConfirm: req.body.passwordConfirm,
-    passwordChangedAt: req.body.passwordChangedAt //////////////
+    passwordChangedAt: req.body.passwordChangedAt,
+    role: req.body.role
   });
 
   const token = signToken(newUser._id);
@@ -33,7 +36,10 @@ exports.signup = catchAsync(async (req, res, next) => {
         id: newUser._id,
         name: newUser.name,
         email: newUser.email,
-        passwordChangedAt: newUser.passwordChangedAt ///////////
+        // use following in order to play with pass change data !!! IMPORTANT
+        // or let user set role when signing up
+        passwordChangedAt: newUser.passwordChangedAt,
+        role: newUser.role
       }
     }
   });
@@ -108,3 +114,16 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    // roles ['admin', 'lead-guide']
+    // if roles not includes user.role of 'admin' or 'lead-guide' - throw error
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have premission to perform this action.', 403)
+      );
+    }
+    next();
+  };
+};

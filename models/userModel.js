@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
     default: 'https://bit.ly/2oa8ScE',
     trim: true
   },
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user'
+  },
   password: {
     type: String,
     required: [true, 'Please enter your password.'],
