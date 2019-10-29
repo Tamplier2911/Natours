@@ -127,3 +127,22 @@ exports.restrictTo = (...roles) => {
     next();
   };
 };
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // Get user based on POSTed email.
+  const currentUser = await User.findOne({ email: req.body.email });
+  if (!currentUser) {
+    next(new AppError('User with that email address does not exists.', 404));
+  } else {
+    // Generate random token.
+    const resetToken = currentUser.createPasswordResetToken();
+    console.log(resetToken);
+
+    // Saving all changes from this.resetToken this.tokenExpires, deactivate all validators
+    await currentUser.save({ validateBeforeSave: false });
+
+    // Send token as an email.
+  }
+});
+
+exports.resetPassword = (req, res, next) => {};
