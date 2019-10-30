@@ -26,7 +26,7 @@ router.post('/login', login);
 router.post('/forgotPassword', forgotPassword);
 
 // reset password
-router.post('/resetPassword', resetPassword);
+router.patch('/resetPassword/:token', resetPassword);
 
 router
   .route('/')
