@@ -1,6 +1,7 @@
 const express = require('express');
 const {
   getAllUsers,
+  updateMe,
   createNewUser,
   getSingleUser,
   updateUser,
@@ -32,6 +33,9 @@ router.patch('/resetPassword/:token', resetPassword);
 
 // update password
 router.patch('/updateMyPassword', protect, updatePassword);
+
+// update currently logged user data
+router.patch('/updateMe', protect, updateMe);
 
 router
   .route('/')
