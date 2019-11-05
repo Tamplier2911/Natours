@@ -2,6 +2,8 @@ const express = require('express');
 const {
   getAllUsers,
   updateMe,
+  deleteMe,
+  restoreMe,
   createNewUser,
   getSingleUser,
   updateUser,
@@ -36,6 +38,12 @@ router.patch('/updateMyPassword', protect, updatePassword);
 
 // update currently logged user data
 router.patch('/updateMe', protect, updateMe);
+
+// delete currently logged user
+router.delete('/deleteMe', protect, deleteMe);
+
+// restore user by email and password
+router.patch('/restoreMe', restoreMe);
 
 router
   .route('/')

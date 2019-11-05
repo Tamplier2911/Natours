@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 // const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
@@ -13,6 +14,12 @@ const filterObject = (obj, ...allowedFields) => {
   });
 
   return filtered;
+};
+
+const signToken = id => {
+  return jwt.sign({ id: id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN
+  });
 };
 
 // Get All Users
@@ -65,6 +72,55 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {
       user: updatedUser
+    }
+  });
+});
+
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user._id, { active: false });
+
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+});
+
+exports.restoreMe = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return next(new AppError('Please provide email and password.', 400));
+  }
+
+  const currentUser = await User.findOne({ email: email })
+    .select('+password')
+    .select('+active');
+
+  if (
+    !currentUser ||
+    !(await currentUser.correctPassword(password, currentUser.password)) ||
+    currentUser.active === true
+  ) {
+    return next(
+      new AppError('Incorrect email or password or user is active.', 401)
+    );
+  }
+
+  const restoredUser = await User.findByIdAndUpdate(currentUser._id, {
+    active: true
+  });
+
+  const token = signToken(currentUser._id);
+
+  res.status(201).json({
+    status: 'success',
+    token: token,
+    message: 'Your account successfully restored.',
+    data: {
+      user: {
+        name: restoredUser.name,
+        email: restoredUser.email
+      }
     }
   });
 });

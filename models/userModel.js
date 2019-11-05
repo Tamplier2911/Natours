@@ -53,6 +53,11 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
     select: false
+  },
+  active: {
+    type: Boolean,
+    default: true,
+    select: false
   }
 });
 
@@ -69,6 +74,11 @@ userSchema.pre('save', function(next) {
   this.passwordChangedAt = Date.now() - 2000;
   next();
 });
+
+// userSchema.pre(/^find/, function(next) {
+//   this.find({ active: { $ne: false } });
+//   next();
+// });
 
 // instance method, available on all docs of this collection
 // this points to current document (if selected)
