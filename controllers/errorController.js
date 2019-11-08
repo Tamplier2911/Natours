@@ -62,7 +62,7 @@ const sendErrorProd = (err, res) => {
     // 2) Send generic message
     res.status(500).json({
       status: 'error',
-      message: 'Oops! How unfortunate!'
+      message: 'Oops! How unfortunate ಥ_ಥ!'
     });
   }
 };
