@@ -85,7 +85,31 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
       select: false // doublcheck
-    }
+    },
+    startLocation: {
+      // GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point']
+      },
+      coordinates: [Number],
+      address: String,
+      description: String
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point']
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number
+      }
+    ]
   },
   {
     toJSON: { virtuals: true },
@@ -118,13 +142,13 @@ tourSchema.pre('save', function(next) {
 // QUERY MIDDLEWARE pre | post (doc, query, agrr, model)
 tourSchema.pre(/^find/, function(next) {
   this.find({ secretTour: { $ne: true } });
-  this.start = Date.now();
+  // this.start = Date.now();
   next();
 });
 
 tourSchema.post(/^find/, function(docs, next) {
   this.end = Date.now();
-  console.log((this.end - this.start) / 1000);
+  // console.log((this.end - this.start) / 1000);
   next();
 });
 
