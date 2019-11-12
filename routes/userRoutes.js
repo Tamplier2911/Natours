@@ -1,4 +1,6 @@
 const express = require('express');
+
+// user controller
 const {
   getAllUsers,
   updateMe,
@@ -10,6 +12,7 @@ const {
   deleteUser
 } = require('../controllers/userController');
 
+// auth controller
 const {
   protect,
   signup,

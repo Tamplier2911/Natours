@@ -16,19 +16,23 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
 });
 
 exports.addNewReview = catchAsync(async (req, res, next) => {
-  //   const currentUserId = req.body.user._id;
-  //   const currentTour = await Tour.find({ name: req.body.tourName });
+  const { review, rating, tour, user } = req.body;
 
-  // USING PROTECT SO HAVING USER OBJECT WITH ID HERE
+  // allow nested routing
+  const { _id } = req.user;
+  const userOutput = user || _id;
 
-  const newReview = await Review.create(req.body);
+  const { tourId } = req.params;
+  const tourOutput = tour || tourId;
 
-  //   const newReview = await Review.create({
-  //     review: req.body.params,
-  //     rating: req.body.rating,
-  //     user: currentUserId,
-  //     tour: currentTour
-  //   });
+  // const newReview = await Review.create(req.body);
+
+  const newReview = await Review.create({
+    review: review,
+    rating: rating,
+    user: userOutput,
+    tour: tourOutput
+  });
 
   res.status(201).json({
     status: 'success',
