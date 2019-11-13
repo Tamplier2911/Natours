@@ -3,6 +3,9 @@ const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
+// handlers
+const { deleteOne } = require('./handlerFactory');
+
 // 127.0.0.1:3000/api/v1/tours?limit=5&sort=-ratingsAverage,price&price[lt]=1000
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
@@ -82,18 +85,7 @@ exports.updateTour = catchAsync(async (req, res, next) => {
 });
 
 // Remove Tour
-exports.deleteTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findByIdAndDelete(req.params.id);
-
-  if (!tour) {
-    return next(new AppError('No tour found with that ID.', 404));
-  }
-
-  res.status(204).json({
-    status: 'success',
-    message: null
-  });
-});
+exports.deleteTour = deleteOne(Tour);
 
 // Aggregation PipeLine
 exports.getTourStats = catchAsync(async (req, res, next) => {

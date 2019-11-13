@@ -15,12 +15,14 @@ const {
 // auth controller
 const { protect, restrictTo } = require('../controllers/authController');
 
-// reviews controller
-const { addNewReview } = require('../controllers/reviewController');
+// reviews router
+const reviewRouter = require('../routes/reviewRoutes');
 
+// tours router
 const router = express.Router();
 
-// router.param('id', checkID);
+// if we match tours/:tourId/reviews we should use review router
+router.use('/:tourId/reviews', reviewRouter);
 
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 
@@ -38,9 +40,5 @@ router
   .get(getSingleTour)
   .patch(updateTour)
   .delete(protect, restrictTo('admin', 'lead-guide'), deleteTour);
-
-router
-  .route('/:tourId/reviews')
-  .post(protect, restrictTo('user'), addNewReview);
 
 module.exports = router;
