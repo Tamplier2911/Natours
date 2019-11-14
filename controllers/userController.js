@@ -1,11 +1,16 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
-// const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 // handlers
-const { deleteOne } = require('./handlerFactory');
+const {
+  getAll,
+  getOne,
+  createOne,
+  updateOne,
+  deleteOne
+} = require('./handlerFactory');
 
 const filterObject = (obj, ...allowedFields) => {
   const filtered = {};
@@ -26,28 +31,7 @@ const signToken = id => {
 };
 
 // Get All Users
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  // BUILD THE QUERY
-  // const features = new APIFeatures(User.find(), req.query)
-  //   .filter()
-  //   .sort()
-  //   .limit()
-  //   .paginate();
-
-  // EXECUTE THE QUERY (await)
-  // const users = await features.query;
-
-  const users = await User.find();
-
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users: users
-    }
-  });
-});
+exports.getAllUsers = getAll(User);
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // if user trying to update password - throw error
@@ -144,25 +128,16 @@ exports.restoreMe = catchAsync(async (req, res, next) => {
   /////////////////////////////////////////////////////////
 });
 
-exports.createNewUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
+// actions to perform by admin
 
-exports.getSingleUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
+// get single user by id
+exports.getSingleUser = getOne(User);
 
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
+// create user
+exports.createNewUser = createOne(User);
 
+// delete user using id
 exports.deleteUser = deleteOne(User);
+
+// update user using id - do NOT update pw with this.
+exports.updateUser = updateOne(User);

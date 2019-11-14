@@ -1,10 +1,14 @@
 const Tour = require('../models/tourModel');
-const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
 
 // handlers
-const { deleteOne } = require('./handlerFactory');
+const {
+  getAll,
+  getOne,
+  createOne,
+  updateOne,
+  deleteOne
+} = require('./handlerFactory');
 
 // 127.0.0.1:3000/api/v1/tours?limit=5&sort=-ratingsAverage,price&price[lt]=1000
 exports.aliasTopTours = (req, res, next) => {
@@ -16,73 +20,18 @@ exports.aliasTopTours = (req, res, next) => {
 };
 
 // Get All Tours
-exports.getAllTours = catchAsync(async (req, res, next) => {
-  // BUILD THE QUERY
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limit()
-    .paginate();
-
-  // EXECUTE THE QUERY (await)
-  const tours = await features.query;
-
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'success',
-    results: tours.length,
-    data: {
-      tours: tours
-    }
-  });
-});
+exports.getAllTours = getAll(Tour);
 
 // Get Single Tour
-exports.getSingleTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id).populate('reviews');
-
-  if (!tour) {
-    return next(new AppError('No tour found with that ID.', 404));
-  }
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: tour
-    }
-  });
-});
+exports.getSingleTour = getOne(Tour, 'reviews');
 
 // Add New Tour
-exports.addNewTour = catchAsync(async (req, res, next) => {
-  const newTour = await Tour.create(req.body);
-  res.status(201).json({
-    status: 'success',
-    data: {
-      tour: newTour
-    }
-  });
-});
+exports.addNewTour = createOne(Tour);
 
 // Update Tour
-// Not completely replaces, but uses PATCH method to update already exsisting fields
-exports.updateTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
-
-  if (!tour) {
-    return next(new AppError('No tour found with that ID.', 404));
-  }
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: tour
-    }
-  });
-});
+// Not completely replaces, but uses PATCH method
+// to update already exsisting fields
+exports.updateTour = updateOne(Tour);
 
 // Remove Tour
 exports.deleteTour = deleteOne(Tour);
