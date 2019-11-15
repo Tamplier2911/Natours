@@ -33,6 +33,11 @@ const signToken = id => {
 // Get All Users
 exports.getAllUsers = getAll(User);
 
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
+};
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   // if user trying to update password - throw error
   if (req.body.password || req.body.passwordConfirm) {

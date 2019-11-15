@@ -6,6 +6,7 @@ const {
   updateMe,
   deleteMe,
   restoreMe,
+  getMe,
   createNewUser,
   getSingleUser,
   updateUser,
@@ -38,6 +39,9 @@ router.patch('/resetPassword/:token', resetPassword);
 
 // update password
 router.patch('/updateMyPassword', protect, updatePassword);
+
+// get
+router.get('/me', protect, getMe, getSingleUser);
 
 // update currently logged user data
 router.patch('/updateMe', protect, updateMe);
