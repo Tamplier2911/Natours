@@ -17,6 +17,7 @@ const {
 const {
   protect,
   signup,
+  restrictTo,
   login,
   forgotPassword,
   resetPassword,
@@ -37,20 +38,30 @@ router.post('/forgotPassword', forgotPassword);
 // reset password
 router.patch('/resetPassword/:token', resetPassword);
 
-// update password
-router.patch('/updateMyPassword', protect, updatePassword);
-
-// get
-router.get('/me', protect, getMe, getSingleUser);
-
-// update currently logged user data
-router.patch('/updateMe', protect, updateMe);
-
-// delete currently logged user
-router.delete('/deleteMe', protect, deleteMe);
-
 // restore user by email and password
 router.patch('/restoreMe', restoreMe);
+
+// PROTECTED
+
+// authentication required for routes below
+router.use(protect);
+
+// update password
+router.patch('/updateMyPassword', updatePassword);
+
+// get
+router.get('/me', getMe, getSingleUser);
+
+// update currently logged user data
+router.patch('/updateMe', updateMe);
+
+// delete currently logged user
+router.delete('/deleteMe', deleteMe);
+
+// RESTRICTED
+
+// routes for admin manipulations
+router.use(restrictTo('admin'));
 
 router
   .route('/')
