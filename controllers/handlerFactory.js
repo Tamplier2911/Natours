@@ -81,6 +81,9 @@ exports.getAll = Model =>
     // EXECUTE THE QUERY (await)
     const document = await features.query;
 
+    // Statistics for query
+    // const document = await features.query.explain();
+
     // SEND RESPONSE
     res.status(200).json({
       status: 'success',
