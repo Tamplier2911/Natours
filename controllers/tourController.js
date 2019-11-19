@@ -1,5 +1,6 @@
 const Tour = require('../models/tourModel');
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
 // handlers
 const {
@@ -35,6 +36,36 @@ exports.updateTour = updateOne(Tour);
 
 // Remove Tour
 exports.deleteTour = deleteOne(Tour);
+
+// Get Tours Within
+// '/tours-within/:distance/center/:latlng/unit/:unit'
+exports.getToursWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  // in order to get radians we need to divide distance by radius of earth
+  const radius = unit === 'mi' ? distance / 3958.8 : distance / 6371;
+
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        'Coordinates must be provided in format - "lat,lng". Units in format - "km" or "mi".'
+      )
+    );
+  }
+
+  const tours = await Tour.find({
+    startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
+  });
+
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      data: tours
+    }
+  });
+});
 
 // Aggregation PipeLine
 exports.getTourStats = catchAsync(async (req, res, next) => {
