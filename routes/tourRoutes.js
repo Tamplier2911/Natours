@@ -10,7 +10,8 @@ const {
   aliasTopTours,
   getTourStats,
   getMonthlyPlan,
-  getToursWithin
+  getToursWithin,
+  getDistance
 } = require('../controllers/tourController');
 
 // auth controller
@@ -25,17 +26,24 @@ const router = express.Router();
 // if we match tours/:tourId/reviews we should use review router
 router.use('/:tourId/reviews', reviewRouter);
 
+// top 5 cheap tours
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 
+// tour statistics
 router.route('/tour-stats').get(getTourStats);
 
+// monthly plan
 router
-  .route('/montly-plan/:year')
+  .route('/monthly-plan/:year')
   .get(protect, restrictTo('admin', 'lead-guide', 'guide'), getMonthlyPlan);
 
+// find tour within certain distance aroud center point
 router
   .route('/tours-within/:distance/center/:latlng/unit/:unit')
   .get(getToursWithin);
+
+// calculate distance from certain point to all tour starter points
+router.route('/distances/:latlng/unit/:unit').get(getDistance);
 
 router
   .route('/')
