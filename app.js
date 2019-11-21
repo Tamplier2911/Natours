@@ -1,6 +1,7 @@
 const express = require('express');
+const path = require('path');
 
-const app = express();
+// request status logger
 const morgan = require('morgan');
 
 // rate limiting | security headers
@@ -23,7 +24,18 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes.js');
 
+// our app instance
+const app = express();
+
+// html rendering engine
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 // GLOBAL MIDDLEWARES
+
+// serving static files
+// app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // security http headers
 app.use(helmet());
@@ -65,9 +77,6 @@ app.use(
   })
 );
 
-// serving static files
-app.use(express.static(`${__dirname}/public`));
-
 // test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -75,6 +84,13 @@ app.use((req, res, next) => {
 });
 
 // ROUTES
+app.get('/', (req, res, next) => {
+  res.status(200).render('base', {
+    tour: 'Forest Tiger',
+    user: 'Thomas'
+  });
+});
+
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
