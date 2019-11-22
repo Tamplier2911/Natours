@@ -6,12 +6,43 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
         link(rel="stylesheet", href="css/style.css")
         link(rel="shortcut icon", href="img/favicon.png", type="image/png")
-        title Natours #{tour}
+        link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300i,700")
+        title Natours | Exciting tours for adventurous people
     body
-        h1= tour
-        p= user.toUpperCase()
+    
+    // HEADER
+    header.header
+        nav.nav.nav--tours
+            a.nav__el(href="#") All tours
 
-        - const x = 9;
-        - const y = 1;
+        //- form.nav__search
+        //-     button.nav__search-btn
+        //-         svg
+        //-             use(xlink:href="img/icons.svg#icon-search")
+        //-     input(type="text" placeholder="Search tours" class="nav__search-input")
 
-        h2= (x+y)
+        div.header__logo
+            img(src="img/logo-white.png" alt="Natours logo")
+        nav.nav.nav--user
+            //- a.nav__el(href="#") My bookings
+            //- a.nav__el(href="#")
+            //-     img.nav__user-img(src="img/user.jpg" alt="User photo")
+            //-     span Jonas
+            button.nav__el Log in
+            button.nav__el.nav__el--cta Sign up
+
+    // CONTENT
+    main.main
+        div.card-container
+
+    // FOOTER
+    footer.footer
+        div.footer__logo
+            img(src="img/logo-green.png" alt="Natours logo")
+        ul.footer__nav
+            li: a(href="#") About us
+            li: a(href="#") Download apps
+            li: a(href="#") Become a guide
+            li: a(href="#") Careers
+            li: a(href="#") Contact
+        p.footer__copyright  by Artem Nikolaiev. All rights reserved.
