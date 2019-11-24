@@ -339,6 +339,7 @@ body {
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
+    /* padding: 2rem 0; */
   }
 }
 .header__logo img {
@@ -1120,8 +1121,8 @@ body {
   flex-direction: column;
 }
 .card:hover {
-  -webkit-box-shadow: 0 0.5rem 2rem #55c57a;
-  box-shadow: 0 0.5rem 2rem #55c57a;
+  -webkit-box-shadow: 0 0 2rem #55c57a;
+  box-shadow: 0 0 2rem #55c57a;
 }
 .card__header {
   position: relative;

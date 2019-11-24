@@ -1,4 +1,102 @@
 extends base
 
 block content
-    h1= title
+    section.section-header
+        div.header__hero
+            div.header__hero-overlay &nbsp;
+            img.header__hero-img(src=`/img/tours/${tour.imageCover}`, alt=`Tour ${tour.name}`)
+
+        div.heading-box
+            h1.heading-primary
+                span= tour.name
+            div.heading-box__group
+                div.heading-box__detail
+                    svg.heading-box__icon
+                        use(xlink:href='/img/icons.svg#icon-clock')
+                    span.heading-box__text= `${tour.duration} days` 
+                div.heading-box__detail
+                    svg.heading-box__icon
+                        use(xlink:href='/img/icons.svg#icon-map-pin')
+                    span.heading-box__text= `${tour.startLocation.description}`
+
+    section.section-description
+        div.overview-box
+            div
+                div.overview-box__group
+                    h2.heading-secondary.ma-bt-lg Quick facts
+                    div.overview-box__detail
+                        svg.overview-box__icon
+                            use(xlink:href='/img/icons.svg#icon-calendar')
+                        span.overview-box__label Next date
+                        span.overview-box__text= `${tour.startDates[0].toLocaleString('en-us', {month: 'long', year: 'numeric'})}`
+                    div.overview-box__detail
+                        svg.overview-box__icon
+                            use(xlink:href='/img/icons.svg#icon-trending-up')
+                        span.overview-box__label Difficulty
+                        span.overview-box__text= `${tour.difficulty}`
+                    div.overview-box__detail
+                        svg.overview-box__icon
+                            use(xlink:href='/img/icons.svg#icon-user')
+                        span.overview-box__label Participants
+                        span.overview-box__text= `${tour.maxGroupSize} people`
+                    div.overview-box__detail
+                        svg.overview-box__icon
+                            use(xlink:href='/img/icons.svg#icon-star')
+                        span.overview-box__label Rating
+                        span.overview-box__text= `${tour.ratingsAverage} / 5`
+
+                    div.overview-box__group
+                        h2.heading-secondary.ma-bt-lg Your tour guides
+
+                        for guide in tour.guides
+                            div.overview-box__detail
+                                img.overview-box__img(src=`/img/users/${guide.photo}`, alt=`${guide.role}`)
+                                span.overview-box__label= `${guide.role}`
+                                span.overview-box__text= `${guide.name}`
+
+        div.description-box
+            h2.heading-secondary.ma-bt-lg= `About the ${tour.name} tour`
+            p.description__text= `${tour.summary}`
+            p.description__text= `${tour.description}`
+
+    section.section-pictures
+        div.picture-box
+            img.picture-box__img.picture-box__img--1(src=`/img/tours/${tour.images[0]}`, alt=`{tour.name} Tour`)
+        div.picture-box
+            img.picture-box__img.picture-box__img--2(src=`/img/tours/${tour.images[1]}`, alt=`{tour.name} Tour`)
+        div.picture-box
+            img.picture-box__img.picture-box__img--3(src=`/img/tours/${tour.images[2]}`, alt=`{tour.name} Tour`)
+
+    section.section-map
+        #map
+
+    section.section-reviews
+        div.reviews
+
+            div.reviews__card
+                div.reviews__avatar
+                    img.reviews__avatar-img(src='/img/users/user-7.jpg', alt='Jim Brown')
+                    h6.reviews__user Jim Brown
+                p.reviews__text Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque dignissimos sint quo commodi corrupti accusantium veniam saepe numquam.
+                div.reviews__rating
+                    svg.reviews__star.reviews__star--active
+                        use(xlink:href='/img/icons.svg#icon-star')
+                    svg.reviews__star.reviews__star--active
+                        use(xlink:href='/img/icons.svg#icon-star')
+                    svg.reviews__star.reviews__star--active
+                        use(xlink:href='/img/icons.svg#icon-star')
+                    svg.reviews__star.reviews__star--active
+                        use(xlink:href='/img/icons.svg#icon-star')
+                    svg.reviews__star.reviews__star--active
+                        use(xlink:href='/img/icons.svg#icon-star')
+
+    section.section-cta
+        div.cta
+            div.cta__img.cta__img--logo
+                img(src='/img/logo-white.png', alt='Natours logo')
+            img.cta__img.cta__img--1(src='/img/tours/tour-5-2.jpg', alt='')
+            img.cta__img.cta__img--2(src='/img/tours/tour-5-1.jpg', alt='')
+            div.cta__content
+                h2.heading-secondary What are you waiting for?
+                p.cta__text 10 days. 1 adventure. Infinite memories. Make it yours today!
+                button.btn.btn--green.span-all-rows Book tour now!
