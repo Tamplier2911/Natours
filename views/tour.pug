@@ -1,5 +1,24 @@
 extends base
 
+//- Mixins related to this template
+mixin overviewBox(icon, label, text)
+    div.overview-box__detail
+        svg.overview-box__icon
+            use(xlink:href=`/img/icons.svg#icon-${icon}`)
+        span.overview-box__label= label
+        span.overview-box__text= text
+
+mixin reviewCard(review)
+    div.reviews__card
+        div.reviews__avatar
+            img.reviews__avatar-img(src=`/img/users/${review.user.photo}`, alt=`${review.user.name}`)
+            h6.reviews__user= review.user.name
+        p.reviews__text= review.review
+        div.reviews__rating
+            each star in [1, 2, 3, 4, 5]
+                svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
+                    use(xlink:href='/img/icons.svg#icon-star')
+
 block content
     section.section-header
         div.header__hero
@@ -8,7 +27,7 @@ block content
 
         div.heading-box
             h1.heading-primary
-                span= tour.name
+                span= `${tour.name} tour`
             div.heading-box__group
                 div.heading-box__detail
                     svg.heading-box__icon
@@ -24,79 +43,54 @@ block content
             div
                 div.overview-box__group
                     h2.heading-secondary.ma-bt-lg Quick facts
-                    div.overview-box__detail
-                        svg.overview-box__icon
-                            use(xlink:href='/img/icons.svg#icon-calendar')
-                        span.overview-box__label Next date
-                        span.overview-box__text= `${tour.startDates[0].toLocaleString('en-us', {month: 'long', year: 'numeric'})}`
-                    div.overview-box__detail
-                        svg.overview-box__icon
-                            use(xlink:href='/img/icons.svg#icon-trending-up')
-                        span.overview-box__label Difficulty
-                        span.overview-box__text= `${tour.difficulty}`
-                    div.overview-box__detail
-                        svg.overview-box__icon
-                            use(xlink:href='/img/icons.svg#icon-user')
-                        span.overview-box__label Participants
-                        span.overview-box__text= `${tour.maxGroupSize} people`
-                    div.overview-box__detail
-                        svg.overview-box__icon
-                            use(xlink:href='/img/icons.svg#icon-star')
-                        span.overview-box__label Rating
-                        span.overview-box__text= `${tour.ratingsAverage} / 5`
+
+                    - const date = tour.startDates[0].toLocaleString('en-us', {month: 'long', year: 'numeric'});
+
+                    +overviewBox("calendar", "Next date", date)
+                    +overviewBox("trending-up", "Difficulty", tour.difficulty)
+                    +overviewBox("user", "Participants", `${tour.maxGroupSize} People`)
+                    +overviewBox("star", "Rating", `${tour.ratingsAverage} / 5`)
 
                     div.overview-box__group
                         h2.heading-secondary.ma-bt-lg Your tour guides
 
-                        for guide in tour.guides
+                        each guide in tour.guides
                             div.overview-box__detail
                                 img.overview-box__img(src=`/img/users/${guide.photo}`, alt=`${guide.role}`)
-                                span.overview-box__label= `${guide.role}`
+                                - if (guide.role === 'lead-guide')
+                                    span.overview-box__label= `Lead Guide`
+                                - if (guide.role === 'guide')
+                                    span.overview-box__label= `Tour Guide`
+                                - if (guide.role === 'intern')
+                                    span.overview-box__label= `Intern`
                                 span.overview-box__text= `${guide.name}`
 
         div.description-box
             h2.heading-secondary.ma-bt-lg= `About the ${tour.name} tour`
-            p.description__text= `${tour.summary}`
-            p.description__text= `${tour.description}`
-
+            - const paragraphs = tour.description.split('\n');
+            each paragraph in paragraphs
+                p.description__text= `${paragraph}`
+                    
     section.section-pictures
-        div.picture-box
-            img.picture-box__img.picture-box__img--1(src=`/img/tours/${tour.images[0]}`, alt=`{tour.name} Tour`)
-        div.picture-box
-            img.picture-box__img.picture-box__img--2(src=`/img/tours/${tour.images[1]}`, alt=`{tour.name} Tour`)
-        div.picture-box
-            img.picture-box__img.picture-box__img--3(src=`/img/tours/${tour.images[2]}`, alt=`{tour.name} Tour`)
+        each img, index in tour.images
+            div.picture-box
+                img.picture-box__img(src=`/img/tours/${img}`, alt=`${tour.name} Tour` class=`picture-box__img--${index + 1}`)
 
     section.section-map
         #map
 
     section.section-reviews
         div.reviews
-
-            div.reviews__card
-                div.reviews__avatar
-                    img.reviews__avatar-img(src='/img/users/user-7.jpg', alt='Jim Brown')
-                    h6.reviews__user Jim Brown
-                p.reviews__text Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque dignissimos sint quo commodi corrupti accusantium veniam saepe numquam.
-                div.reviews__rating
-                    svg.reviews__star.reviews__star--active
-                        use(xlink:href='/img/icons.svg#icon-star')
-                    svg.reviews__star.reviews__star--active
-                        use(xlink:href='/img/icons.svg#icon-star')
-                    svg.reviews__star.reviews__star--active
-                        use(xlink:href='/img/icons.svg#icon-star')
-                    svg.reviews__star.reviews__star--active
-                        use(xlink:href='/img/icons.svg#icon-star')
-                    svg.reviews__star.reviews__star--active
-                        use(xlink:href='/img/icons.svg#icon-star')
+            each review in tour.reviews
+                +reviewCard(review)
 
     section.section-cta
         div.cta
             div.cta__img.cta__img--logo
                 img(src='/img/logo-white.png', alt='Natours logo')
-            img.cta__img.cta__img--1(src='/img/tours/tour-5-2.jpg', alt='')
-            img.cta__img.cta__img--2(src='/img/tours/tour-5-1.jpg', alt='')
+            img.cta__img.cta__img--1(src=`/img/tours/${tour.images[0]}`, alt=`${tour.name} view`)
+            img.cta__img.cta__img--2(src=`/img/tours/${tour.images[1]}`, alt=`${tour.name} view`)
             div.cta__content
                 h2.heading-secondary What are you waiting for?
-                p.cta__text 10 days. 1 adventure. Infinite memories. Make it yours today!
+                p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
                 button.btn.btn--green.span-all-rows Book tour now!
