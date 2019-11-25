@@ -1,5 +1,10 @@
 extends base
 
+block append head
+    script(src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js')
+    link(href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet')
+    script(type="text/javascript" src="/js/mapbox.js" async)
+
 //- Mixins related to this template
 mixin overviewBox(icon, label, text)
     div.overview-box__detail
@@ -77,7 +82,8 @@ block content
                 img.picture-box__img(src=`/img/tours/${img}`, alt=`${tour.name} Tour` class=`picture-box__img--${index + 1}`)
 
     section.section-map
-        #map
+        div#map(data-locations=`${JSON.stringify(tour.locations)}`)
+            //- <div id='map' style='width: 400px; height: 300px;'></div>
 
     section.section-reviews
         div.reviews
