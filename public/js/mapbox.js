@@ -1,9 +1,9 @@
 /* eslint-disable */
 
-console.log('clinet side test');
+// console.log('clinet side test');
 const locations = JSON.parse(document.getElementById('map').dataset.locations);
 
-console.log(locations);
+// console.log(locations);
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYXJ0ZW0yOTExIiwiYSI6ImNrM2VrcXNtNzA5YjMzbm16cWN3bjg0MjUifQ.nAGRcWm4Pe8rEiT6GvQNAA';
