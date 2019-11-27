@@ -15,6 +15,9 @@ const xss = require('xss-clean');
 // avoiding parameter polution
 const hpp = require('hpp');
 
+// cookie parser middleware
+const cookieParser = require('cookie-parser');
+
 // error handlers
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -55,8 +58,10 @@ const limiter = rateLimit({
 
 app.use('/api', limiter);
 
-// body parser (read data from body into req.body)
+// body parser (parse data from body into req.body)
 app.use(express.json({ limit: '10kb' }));
+// cookie parser (parses data from cookie)
+app.use(cookieParser());
 
 // data sanitization against NoSQL query injections
 app.use(mongoSanitize());
@@ -81,6 +86,8 @@ app.use(
 // test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  // CONSOLE LOG COOKIES ON EACH REQUEST
+  console.log(req.cookies);
   next();
 });
 

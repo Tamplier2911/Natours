@@ -1,5 +1,9 @@
 extends base
 
+block append head
+    script(type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js" async)
+    script(type="text/javascript" src="/js/login.js" async)
+
 block content
     main.main
         div.login-form
