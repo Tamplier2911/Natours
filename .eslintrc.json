@@ -18,5 +18,30 @@
     // "rest-spread-spacing": "off",
     "perfer-object-spread": "off",
     "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }]
+  },
+  "parserOptions": {
+    "sourceType": "module"
   }
 }
+
+/*
+{
+  "ecmaFeatures": {
+      "modules": true,
+      "spread" : true,
+      "restParams" : true
+  },
+  "env" : {
+      "browser" : true,
+      "node" : true,
+      "es6" : true
+  },
+  "rules" : {
+      "no-unused-vars" : 2,
+      "no-undef" : 2
+  },
+  "parserOptions": {
+      "sourceType": "module"
+  }
+}
+*/

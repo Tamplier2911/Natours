@@ -8,6 +8,7 @@ html(lang="en")
             link(rel="stylesheet", href="/css/style.css")
             link(rel="shortcut icon", href="/img/favicon.png", type="image/png")
             link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300i,700")
+            link(href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet')
             title Natours | #{title || "Exciting tours for adventurous people"}
     body
     
@@ -17,6 +18,8 @@ html(lang="en")
     // CONTENT
     block content
 
-
     // FOOTER
     include _footer
+    
+    script(src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js')
+    script(src="/js/bundle.js")
