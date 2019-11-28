@@ -6,8 +6,9 @@ import '@babel/polyfill';
 // map
 import { displayMap } from './mapbox';
 
-// login
+// login / signup
 import { login } from './login';
+import { signup } from './signup';
 
 // logout
 
@@ -18,8 +19,9 @@ console.log('Parcel bundler.');
 // get map element
 const mapBox = document.getElementById('map');
 
-// get form element
-const loginForm = document.querySelector('.form');
+// get forms
+const loginForm = document.querySelector('#loginForm');
+const signupForm = document.querySelector('#signupForm');
 
 // DELIGATIONS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -38,5 +40,19 @@ if (loginForm) {
     const password = document.querySelector('#password').value;
 
     login(email, password);
+  });
+}
+
+// if signup form, perform signup on submit
+if (signupForm) {
+  signupForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const name = document.querySelector('#name').value;
+    const email = document.querySelector('#email').value;
+    const password = document.querySelector('#password').value;
+    const passwordConfirm = document.querySelector('#passwordConfirm').value;
+
+    signup(name, email, password, passwordConfirm);
   });
 }
