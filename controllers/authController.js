@@ -81,6 +81,19 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+// sending empty JWT in order to rewrite one that currently in browser and perform logout
+exports.logout = (req, res) => {
+  res.cookie('jwt', '', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true
+  });
+
+  res.status(200).json({
+    status: 'success',
+    msg: 'You have logged out securely.'
+  });
+};
+
 exports.protect = catchAsync(async (req, res, next) => {
   // Get token and check if it exists.
   let token;
@@ -127,35 +140,39 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 // Only for rendered pages, no errors!
-exports.isLoggedIn = catchAsync(async (req, res, next) => {
+exports.isLoggedIn = async (req, res, next) => {
   // Get token and check if it exists.
   if (req.cookies.jwt) {
-    // Verification of token. If token correct -returns object with id of the user.
-    const decoded = await promisify(jwt.verify)(
-      req.cookies.jwt,
-      process.env.JWT_SECRET
-    );
+    try {
+      // Verification of token. If token correct -returns object with id of the user.
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
 
-    // Check if user still exists.
-    const currentUser = await User.findById(decoded.id);
+      // Check if user still exists.
+      const currentUser = await User.findById(decoded.id);
 
-    // if no just go to next middleware
-    if (!currentUser) {
+      // if no just go to next middleware
+      if (!currentUser) {
+        return next();
+      }
+
+      // Check if user changed password after then token was issued.
+      if (currentUser.changePasswordAfter(decoded.iat)) {
+        // if did just go to next middleware
+        return next();
+      }
+
+      // if we get here - We have a logged in user
+      res.locals.user = currentUser;
+      return next();
+    } catch (err) {
       return next();
     }
-
-    // Check if user changed password after then token was issued.
-    if (currentUser.changePasswordAfter(decoded.iat)) {
-      // if did just go to next middleware
-      return next();
-    }
-
-    // if we get here - We have a logged in user
-    res.locals.user = currentUser;
-    return next();
   }
   next();
-});
+};
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {

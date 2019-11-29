@@ -7,7 +7,7 @@ import '@babel/polyfill';
 import { displayMap } from './mapbox';
 
 // login / signup
-import { login } from './login';
+import { login, logout } from './login';
 import { signup } from './signup';
 
 // logout
@@ -22,6 +22,9 @@ const mapBox = document.getElementById('map');
 // get forms
 const loginForm = document.querySelector('#loginForm');
 const signupForm = document.querySelector('#signupForm');
+
+// get logout button
+const logoutButton = document.querySelector('.nav__el--logout');
 
 // DELIGATIONS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -40,6 +43,12 @@ if (loginForm) {
     const password = document.querySelector('#password').value;
 
     login(email, password);
+  });
+}
+
+if (logoutButton) {
+  logoutButton.addEventListener('click', () => {
+    logout();
   });
 }
 

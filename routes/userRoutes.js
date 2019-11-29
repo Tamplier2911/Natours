@@ -19,6 +19,7 @@ const {
   signup,
   restrictTo,
   login,
+  logout,
   forgotPassword,
   resetPassword,
   updatePassword
@@ -31,6 +32,9 @@ router.post('/signup', signup);
 
 // login
 router.post('/login', login);
+
+// logout
+router.get('/logout', logout);
 
 // forgot password
 router.post('/forgotPassword', forgotPassword);

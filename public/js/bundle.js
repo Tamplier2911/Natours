@@ -8411,7 +8411,7 @@ exports.showAlert = showAlert;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.login = void 0;
+exports.logout = exports.login = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -8470,6 +8470,45 @@ var login = function login(email, password) {
 };
 
 exports.login = login;
+
+var logout = function logout() {
+  var res;
+  return regeneratorRuntime.async(function logout$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.prev = 0;
+          _context2.next = 3;
+          return regeneratorRuntime.awrap((0, _axios.default)({
+            method: 'GET',
+            url: 'http://localhost:3000/api/v1/users/logout'
+          }));
+
+        case 3:
+          res = _context2.sent;
+
+          if (res.data.status === 'success') {
+            (0, _alerts.showAlert)('success', 'Logged out successfully!');
+            location.reload(true);
+          }
+
+          _context2.next = 10;
+          break;
+
+        case 7:
+          _context2.prev = 7;
+          _context2.t0 = _context2["catch"](0);
+          (0, _alerts.showAlert)('error', 'Something went wrong! Please perform log out again!');
+
+        case 10:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, null, null, [[0, 7]]);
+};
+
+exports.logout = logout;
 },{"axios":"../../node_modules/axios/index.js","./alerts":"alerts.js"}],"signup.js":[function(require,module,exports) {
 "use strict";
 
@@ -8809,7 +8848,9 @@ console.log('Parcel bundler.'); // DOM ELEMENTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 var mapBox = document.getElementById('map'); // get forms
 
 var loginForm = document.querySelector('#loginForm');
-var signupForm = document.querySelector('#signupForm'); // DELIGATIONS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+var signupForm = document.querySelector('#signupForm'); // get logout button
+
+var logoutButton = document.querySelector('.nav__el--logout'); // DELIGATIONS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // get location from html dataset in mapBox and if data is found execute map
 
 if (mapBox) {
@@ -8824,6 +8865,12 @@ if (loginForm) {
     var email = document.querySelector('#email').value;
     var password = document.querySelector('#password').value;
     (0, _login.login)(email, password);
+  });
+}
+
+if (logoutButton) {
+  logoutButton.addEventListener('click', function () {
+    (0, _login.logout)();
   });
 } // if signup form, perform signup on submit
 

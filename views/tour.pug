@@ -73,8 +73,8 @@ block content
         div.description-box
             h2.heading-secondary.ma-bt-lg= `About the ${tour.name} tour`
             - const paragraphs = tour.description.split('\n');
-            each paragraph in paragraphs
-                p.description__text= `${paragraph}`
+            each paragraph, index  in paragraphs
+                p.description__text(class=`description__text--${index}`)= `${paragraph}`
                     
     section.section-pictures
         each img, index in tour.images
@@ -97,6 +97,6 @@ block content
             img.cta__img.cta__img--1(src=`/img/tours/${tour.images[0]}`, alt=`${tour.name} view`)
             img.cta__img.cta__img--2(src=`/img/tours/${tour.images[1]}`, alt=`${tour.name} view`)
             div.cta__content
-                h2.heading-secondary What are you waiting for?
+                h2.heading-secondary.heading-secondary-cta What are you waiting for?
                 p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
                 button.btn.btn--green.span-all-rows Book tour now!
