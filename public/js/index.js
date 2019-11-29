@@ -56,3 +56,10 @@ if (signupForm) {
     signup(name, email, password, passwordConfirm);
   });
 }
+
+// Header functionality
+const menuCheckbox = document.querySelector('.header__check');
+const header = document.querySelector('.header');
+menuCheckbox.addEventListener('change', () => {
+  header.classList.toggle('headerHeight');
+});

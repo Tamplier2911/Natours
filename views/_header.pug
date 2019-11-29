@@ -10,6 +10,14 @@ header.header
 
     div.header__logo
         img(src="/img/logo-white.png" alt="Natours logo")
+
+    input.header__check(type="checkbox" id="check")
+    div.header__menu
+        label.menu__label(for="check")
+            div.menu__label--top.menu__label--line
+            div.menu__label--mid.menu__label--line
+            div.menu__label--bot.menu__label--line
+
     nav.nav.nav--user
         if user
             a.nav__el.nav__el--logout(href="#") Log Out
