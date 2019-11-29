@@ -17,7 +17,8 @@
     // "prefer-spread": "off",
     // "rest-spread-spacing": "off",
     "perfer-object-spread": "off",
-    "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }]
+    "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }],
+    "no-lonely-if": "off"
   },
   "parserOptions": {
     "sourceType": "module"

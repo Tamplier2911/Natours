@@ -1,0 +1,10 @@
+extends base
+
+block content
+    main.main
+        div.error
+            div.error__title
+                h2.heading-secondary.heading-secondary--error Uh oh! Something went wrong!   
+                div.error__image--container
+                    img.error__image(src ="/img/error.png" alt="Something go wrong!")
+            div.error__msg= msg

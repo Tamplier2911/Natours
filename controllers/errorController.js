@@ -36,35 +36,63 @@ const handleJWTExired = err => {
   return new AppError(message, 401);
 };
 
-const sendErrorDev = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
-    error: err,
-    message: err.message,
-    stack: err.stack
+const sendErrorDev = (err, req, res) => {
+  // API
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(err.statusCode).json({
+      status: err.status,
+      error: err,
+      message: err.message,
+      stack: err.stack
+    });
+    // RENDERED WEBSITE
+  }
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong!',
+    msg: err.message
   });
 };
 
-const sendErrorProd = (err, res) => {
-  // Operational, truested error: send message to client
-  if (err.isOperational) {
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message
-    });
+const sendErrorProd = (err, req, res) => {
+  // FOR API
+  if (req.originalUrl.startsWith('/api')) {
+    // Operational, truested error: send message to client
+    if (err.isOperational) {
+      return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message
+      });
 
-    // Programmatic or other unknown error: don't leak error details
-  } else {
+      // Programmatic or other unknown error: don't leak error details
+    }
     // 1) Log error
-    // console.error('ERROR ಥ_ಥ', err);
-    console.error('ERROR ಥ_ಥ -', err.name, err.message);
+    console.error('ERROR ಥ_ಥ', err);
 
     // 2) Send generic message
-    res.status(500).json({
+    return res.status(500).json({
       status: 'error',
       message: 'Oops! How unfortunate ಥ_ಥ!'
     });
+
+    // FOR RENDERED WEBSITE
   }
+  // Operational, truested error: send message to client
+  if (err.isOperational) {
+    return res.status(err.statusCode).render('error', {
+      title: 'Something went wrong!',
+      msg: err.message
+    });
+
+    // Programmatic or other unknown error: don't leak error details
+  }
+  // 1) Log error
+  console.error('ERROR ಥ_ಥ', err);
+
+  // 2) Send generic message
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong!',
+    msg: 'Oops! How unfortunate ಥ_ಥ!'
+  });
 };
 
 module.exports = (err, req, res, next) => {
@@ -73,27 +101,27 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
-    sendErrorDev(err, res);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     // Take copy of original error object, and work with it since now
     let error = JSON.parse(JSON.stringify(err));
     if (error.name === 'CastError') {
       error = handleCastErrorDB(error);
-      sendErrorProd(error, res);
+      sendErrorProd(error, req, res);
     } else if (error.code === 11000) {
       error = handleDuplicateFieldDB(error);
-      sendErrorProd(error, res);
+      sendErrorProd(error, req, res);
     } else if (error.name === 'ValidationError') {
       error = handleValidationErrorDB(error);
-      sendErrorProd(error, res);
+      sendErrorProd(error, req, res);
     } else if (err.name === 'JsonWebTokenError') {
       error = handleJWTError(error);
-      sendErrorProd(error, res);
+      sendErrorProd(error, req, res);
     } else if (err.name === 'TokenExpiredError') {
       error = handleJWTExired(error);
-      sendErrorProd(error, res);
+      sendErrorProd(error, req, res);
     } else {
-      sendErrorProd(err, res);
+      sendErrorProd(err, req, res);
     }
   }
 };
