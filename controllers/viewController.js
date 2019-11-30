@@ -41,26 +41,9 @@ exports.getTour = catchAsync(async (req, res, next) => {
 
 // get user page
 exports.getUser = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
-
-  const user = await User.findById(id);
-
-  if (!user) {
-    return next(new AppError('There is no user with that id.', '404'));
-  }
-
   res.status(200).render('account', {
-    title: 'Your account',
-    user: user
+    title: 'Your account'
   });
-
-  // Can expose user object in protect handler to res.locals.user
-  // so it will be already rendered.
-  /*
-  res.status(200).render('account', {
-    title: 'Your account',
-  })
-  */
 });
 
 // get login form

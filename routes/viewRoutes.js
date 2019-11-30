@@ -26,6 +26,6 @@ router.get('/login', getLoginForm);
 router.get('/signup', getSignupForm);
 
 // user page
-router.get('/user/:id', protect, getUser);
+router.get('/user/:name', protect, getUser);
 
 module.exports = router;

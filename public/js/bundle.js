@@ -8489,24 +8489,26 @@ var logout = function logout() {
 
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', 'Logged out successfully!');
-            location.reload(true);
-            location.assign('/');
-          }
+            location.reload(true); // will load from cache !!!
+            // location.assign('/');
+          } // double check
 
-          _context2.next = 10;
+
+          location.assign('/');
+          _context2.next = 11;
           break;
 
-        case 7:
-          _context2.prev = 7;
+        case 8:
+          _context2.prev = 8;
           _context2.t0 = _context2["catch"](0);
           (0, _alerts.showAlert)('error', 'Something went wrong! Please perform log out again!');
 
-        case 10:
+        case 11:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[0, 7]]);
+  }, null, null, [[0, 8]]);
 };
 
 exports.logout = logout;
@@ -8921,7 +8923,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61941" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62841" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
