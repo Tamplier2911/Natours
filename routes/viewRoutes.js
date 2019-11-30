@@ -1,4 +1,5 @@
 const express = require('express');
+
 const {
   getOverview,
   getTour,
@@ -7,10 +8,11 @@ const {
   getUser
 } = require('../controllers/viewController');
 
-const { isLoggedIn } = require('../controllers/authController');
+const { isLoggedIn, protect } = require('../controllers/authController');
 
 const router = express.Router();
 
+// render user menu in header if logged in else | login signup buttons
 router.use(isLoggedIn);
 
 // get all tours
@@ -24,6 +26,6 @@ router.get('/login', getLoginForm);
 router.get('/signup', getSignupForm);
 
 // user page
-router.get('/user/:id', getUser);
+router.get('/user/:id', protect, getUser);
 
 module.exports = router;

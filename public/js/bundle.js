@@ -8490,6 +8490,7 @@ var logout = function logout() {
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', 'Logged out successfully!');
             location.reload(true);
+            location.assign('/');
           }
 
           _context2.next = 10;
@@ -8920,7 +8921,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61385" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61941" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

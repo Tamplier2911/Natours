@@ -45,12 +45,22 @@ exports.getUser = catchAsync(async (req, res, next) => {
 
   const user = await User.findById(id);
 
-  console.log(user);
+  if (!user) {
+    return next(new AppError('There is no user with that id.', '404'));
+  }
 
   res.status(200).render('account', {
-    title: 'My Account',
+    title: 'Your account',
     user: user
   });
+
+  // Can expose user object in protect handler to res.locals.user
+  // so it will be already rendered.
+  /*
+  res.status(200).render('account', {
+    title: 'Your account',
+  })
+  */
 });
 
 // get login form

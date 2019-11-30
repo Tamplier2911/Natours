@@ -1,53 +1,30 @@
 extends base
 
+mixin menuItem(link, icon, text, active)
+    li(class=`${active ? "side-nav--active" : ''}`)
+        a(href=`${link}`)
+            svg
+                use(xlink:href=`/img/icons.svg#icon-${icon}`)
+            | #{text}
+
 block content
 
     main.main
         div.user-view
             nav.user-view__menu
                 ul.side-nav
-                    li.side-nav--active
-                        a(href='#')
-                            svg
-                                use(xlink:href='img/icons.svg#icon-settings')
-                            | Settings
-                    li
-                        a(href='#')
-                            svg
-                                use(xlink:href='img/icons.svg#icon-briefcase')
-                            | My bookings
-                    li
-                        a(href='#')
-                            svg
-                                use(xlink:href='img/icons.svg#icon-star')
-                            | My reviews
-                    li
-                        a(href='#')
-                            svg
-                                use(xlink:href='img/icons.svg#icon-credit-card')
-                            | Billing
-                div.admin-nav
-                    h5.admin-nav__heading Admin
-                    ul.side-nav
-                        li
-                            a(href='#')
-                                svg
-                                    use(xlink:href='img/icons.svg#icon-map')
-                                | Manage tours
-                        li
-                            a(href='#')
-                                svg
-                                    use(xlink:href='img/icons.svg#icon-users')
-                                | Manage users
-                        li
-                            a(href='#')
-                                svg
-                                    use(xlink:href='img/icons.svg#icon-star')
-                                | Manage reviews
-                        li
-                            a(href='#')
-                                svg
-                                    use(xlink:href='img/icons.svg#icon-briefcase')
+                    +menuItem("#", "settings", "Settings", true)
+                    +menuItem("#", "briefcase", "My bookings", false)
+                    +menuItem("#", "star", "My reviews", false)
+                    +menuItem("#", "credit-card", "Billing", false)
+                - if (user.role === 'admin')
+                    div.admin-nav
+                        h5.admin-nav__heading Admin
+                        ul.side-nav
+                            +menuItem("#", "map", "Manage tours", false)
+                            +menuItem("#", "users", "Manage users", false)
+                            +menuItem("#", "star", "Manage reviews", false)
+                            +menuItem("#", "briefcase", "Study Case", false)
 
             div.user-view__content
                 div.user-view__form-container
@@ -55,13 +32,13 @@ block content
                     form.form.form-user-data
                         div.form__group
                             label.form__label(for='name') Name
-                            input#name.form__input(type='text', value='Jonas Schmedtmann', required)
+                            input#name.form__input(type='text', value=`${user.name}`, required)
                         div.form__group.ma-bt-md
                             label.form__label(for='email') Email address
-                            input#email.form__input(type='email', value='admin@natours.io', required)
+                            input#email.form__input(type='email', value=`${user.email}`, required)
                         div.form__group.form__photo-upload
                             //- img.form__user-photo(src='/img/user.jpg', alt='User photo')
-                            img.form__user-photo(src=`${user.photo}`, alt='User photo')
+                            img.form__user-photo(src=`${user.photo}`, alt=`${user.name} photo`)
                             a.btn-text(href='') Choose new photo
                         div.form__group.right
                             button.btn.btn--small.btn--green Save settings
