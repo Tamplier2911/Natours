@@ -10,7 +10,8 @@ import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { signup } from './signup';
 
-// logout
+// update user data
+import { updateData, updatePassword } from './update';
 
 console.log('Parcel bundler.');
 
@@ -22,6 +23,8 @@ const mapBox = document.getElementById('map');
 // get forms
 const loginForm = document.querySelector('#loginForm');
 const signupForm = document.querySelector('#signupForm');
+const updateUserDataForm = document.querySelector('.form-user-data');
+const updateUserPasswordForm = document.querySelector('.form-user-settings');
 
 // get logout button
 const logoutButton = document.querySelector('.nav__el--logout');
@@ -63,6 +66,44 @@ if (signupForm) {
     const passwordConfirm = document.querySelector('#passwordConfirm').value;
 
     signup(name, email, password, passwordConfirm);
+  });
+}
+
+// if updateUserInfo form, perform update on submit
+if (updateUserDataForm) {
+  updateUserDataForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const name = document.querySelector('#nameUpdate').value;
+    const email = document.querySelector('#emailUpdate').value;
+
+    updateData(name, email);
+  });
+}
+
+// if updateUserPassword form, perform update on submit
+if (updateUserPasswordForm) {
+  updateUserPasswordForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const password = document.querySelector('#passwordCurrent').value;
+    const newPassword = document.querySelector('#passwordNew').value;
+    const passwordConfirm = document.querySelector('#passwordConfirm').value;
+
+    document.querySelector('#savePassword').textContent = 'Updating...';
+
+    updatePassword(password, newPassword, passwordConfirm);
+
+    // clear password fields after submition
+    // dose not realy matter cause forcing pagereload
+
+    /*
+
+    password.value = '';
+    newPassword.value = '';
+    passwordConfirm.value = '';
+
+    */
   });
 }
 

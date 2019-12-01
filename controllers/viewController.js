@@ -40,11 +40,11 @@ exports.getTour = catchAsync(async (req, res, next) => {
 });
 
 // get user page
-exports.getUser = catchAsync(async (req, res, next) => {
+exports.getUser = (req, res, next) => {
   res.status(200).render('account', {
     title: 'Your account'
   });
-});
+};
 
 // get login form
 exports.getLoginForm = (req, res) => {
@@ -59,3 +59,27 @@ exports.getSignupForm = (req, res) => {
     title: 'Create new account'
   });
 };
+
+/*
+
+// update user data using traditional form methods
+exports.updateUserData = catchAsync(async (req, res, next) => {
+  const { name, email, photo } = req.body;
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      name: name,
+      email: email,
+      photo: photo || 'https://bit.ly/2oa8ScE'
+    },
+    { new: true, runValidators: true }
+  );
+
+  res.status(200).render('account', {
+    title: 'Your account',
+    user: updatedUser
+  });
+});
+
+*/

@@ -1576,3 +1576,10 @@ body {
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
 }
+
+.user__name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 6rem;
+  white-space: nowrap;
+}

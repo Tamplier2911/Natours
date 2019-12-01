@@ -29,13 +29,17 @@ block content
             div.user-view__content
                 div.user-view__form-container
                     h2.heading-secondary.ma-bt-md Your account settings
+                    //- WITHOUT API - Using Traditional Action / Method
+                    //- form.form.form-user-data(action="/submit-user-data" method="POST")
                     form.form.form-user-data
                         div.form__group
                             label.form__label(for='name') Name
-                            input#name.form__input(type='text', value=`${user.name}`, required)
+                            input#nameUpdate.form__input(type='text', value=`${user.name}`, required)
+                            //- input#nameUpdate.form__input(name="name" type='text', value=`${user.name}`, required)
                         div.form__group.ma-bt-md
                             label.form__label(for='email') Email address
-                            input#email.form__input(type='email', value=`${user.email}`, required)
+                            input#emailUpdate.form__input(type='email', value=`${user.email}`, required)
+                            //- input#emailUpdate.form__input(name="email" type='email', value=`${user.email}`, required)
                         div.form__group.form__photo-upload
                             //- img.form__user-photo(src='/img/user.jpg', alt='User photo')
                             img.form__user-photo(src=`${user.photo}`, alt=`${user.name} photo`)
@@ -48,12 +52,12 @@ block content
                     form.form.form-user-settings
                         div.form__group
                             label.form__label(for='password-current') Current password
-                            input#password-current.form__input(type='password', placeholder='••••••••', required, minlength='8')
+                            input#passwordCurrent.form__input(type='password', placeholder='••••••••', required, minlength='8')
                         .form__group
                             label.form__label(for='password') New password
-                            input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
+                            input#passwordNew.form__input(type='password', placeholder='••••••••', required, minlength='8')
                         .form__group.ma-bt-lg
                             label.form__label(for='password-confirm') Confirm password
-                            input#password-confirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
+                            input#passwordConfirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
                         .form__group.right
-                            button.btn.btn--small.btn--green Save password
+                            button#savePassword.btn.btn--small.btn--green Save password

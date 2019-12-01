@@ -6,6 +6,7 @@ const {
   getLoginForm,
   getSignupForm,
   getUser
+  // updateUserData
 } = require('../controllers/viewController');
 
 const { isLoggedIn, protect } = require('../controllers/authController');
@@ -27,5 +28,12 @@ router.get('/signup', getSignupForm);
 
 // user page
 router.get('/user/:name', protect, getUser);
+
+/*
+
+// update user info, using traditional form methods
+router.post('/submit-user-data', protect, updateUserData);
+
+*/
 
 module.exports = router;

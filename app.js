@@ -60,6 +60,8 @@ app.use('/api', limiter);
 
 // body parser (parse data from body into req.body)
 app.use(express.json({ limit: '10kb' }));
+// parse data from urlencoded FORM
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 // cookie parser (parses data from cookie)
 app.use(cookieParser());
 
