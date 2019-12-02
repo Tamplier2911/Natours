@@ -1,3 +1,5 @@
+const multer = require('multer');
+
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
@@ -38,7 +40,43 @@ exports.getMe = (req, res, next) => {
   next();
 };
 
+// MULTER CONFIGURATION
+
+// storage properties
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/img/users');
+  },
+  filename: (req, file, cb) => {
+    // user - userID - timestamp - extension
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `user-${req.user._id}-${Date.now()}.${ext}`);
+  }
+});
+
+// filter rpoperties. Is file image?
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('File must be an image.', 400), false);
+  }
+};
+
+// user properties for upload
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
+
+// Phtoto upload middleware for /updateMe route
+exports.uploadUserPhoto = upload.single('photo');
+
+// Update logged in User
 exports.updateMe = catchAsync(async (req, res, next) => {
+  // console.log(req.file); - ref to file object
+  // console.log(req.body); - ref to body
+  // console.log(req.user); - ref to user object from protect
   // if user trying to update password - throw error
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -50,7 +88,13 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
 
   // filter request body in case of avoiding unwanted fields
-  const filteredBody = filterObject(req.body, 'name', 'email', 'photo');
+  const filteredBody = filterObject(req.body, 'name', 'email');
+
+  // if we have req.file from multer middleware
+  // we store filename as a photo property
+  if (req.file) {
+    filteredBody.photo = req.file.filename;
+  }
 
   // find user by id and update document using filtered body
   const userID = req.user._id;
@@ -68,6 +112,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+// Remove logged in User
 exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user._id, { active: false });
 
@@ -77,6 +122,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
+// Restore logged in User
 exports.restoreMe = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 

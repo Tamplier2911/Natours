@@ -41,8 +41,8 @@ block content
                             input#emailUpdate.form__input(type='email', value=`${user.email}`, required)
                             //- input#emailUpdate.form__input(name="email" type='email', value=`${user.email}`, required)
                         div.form__group.form__photo-upload
-                            //- img.form__user-photo(src='/img/user.jpg', alt='User photo')
-                            img.form__user-photo(src=`${user.photo}`, alt=`${user.name} photo`)
+                            img.form__user-photo(src=`/img/users/${user.photo}`, alt='User photo')
+                            //- img.form__user-photo(src=`${user.photo}`, alt=`${user.name} photo`)
                             a.btn-text(href='') Choose new photo
                         div.form__group.right
                             button.btn.btn--small.btn--green Save settings

@@ -89,7 +89,7 @@ app.use(
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   // CONSOLE LOG COOKIES ON EACH REQUEST
-  console.log(req.cookies);
+  // console.log(req.cookies);
   next();
 });
 
