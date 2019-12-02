@@ -11,7 +11,8 @@ const {
   getSingleUser,
   updateUser,
   deleteUser,
-  uploadUserPhoto
+  uploadUserPhoto,
+  resizeUserPhoto
 } = require('../controllers/userController');
 
 // auth controller
@@ -58,7 +59,7 @@ router.patch('/updateMyPassword', updatePassword);
 router.get('/me', getMe, getSingleUser);
 
 // update currently logged user data
-router.patch('/updateMe', uploadUserPhoto, updateMe);
+router.patch('/updateMe', uploadUserPhoto, resizeUserPhoto, updateMe);
 
 // delete currently logged user
 router.delete('/deleteMe', deleteMe);

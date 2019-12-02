@@ -1,4 +1,5 @@
 const multer = require('multer');
+const sharp = require('sharp');
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
@@ -40,9 +41,11 @@ exports.getMe = (req, res, next) => {
   next();
 };
 
-// MULTER CONFIGURATION
+// MULTER CONFIGURATION - IMAGE PROCESSING
 
-// storage properties
+/*
+
+// storage properties - SAVING STRIGHT TO THE DISC
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/img/users');
@@ -53,6 +56,11 @@ const multerStorage = multer.diskStorage({
     cb(null, `user-${req.user._id}-${Date.now()}.${ext}`);
   }
 });
+
+*/
+
+// storage properties - SAVING IN MEMORY BUFFER
+const multerStorage = multer.memoryStorage();
 
 // filter rpoperties. Is file image?
 const multerFilter = (req, file, cb) => {
@@ -71,6 +79,21 @@ const upload = multer({
 
 // Phtoto upload middleware for /updateMe route
 exports.uploadUserPhoto = upload.single('photo');
+
+// Photo resizing and conversion
+exports.resizeUserPhoto = (req, res, next) => {
+  if (!req.file) next();
+
+  req.file.filename = `user-${req.user._id}-${Date.now()}.jpeg`;
+
+  sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+
+  next();
+};
 
 // Update logged in User
 exports.updateMe = catchAsync(async (req, res, next) => {

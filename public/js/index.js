@@ -74,10 +74,18 @@ if (updateUserDataForm) {
   updateUserDataForm.addEventListener('submit', e => {
     e.preventDefault();
 
+    // selecting field values
     const name = document.querySelector('#nameUpdate').value;
     const email = document.querySelector('#emailUpdate').value;
+    const photo = document.querySelector('#photoUpdate').files[0];
 
-    updateData(name, email);
+    // specifying enctype multipart/form-data programmatically
+    const form = new FormData();
+    form.append('name', name);
+    form.append('email', email);
+    form.append('photo', photo);
+
+    updateData(form);
   });
 }
 

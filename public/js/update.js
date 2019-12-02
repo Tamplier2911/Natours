@@ -5,19 +5,13 @@ import axios from 'axios';
 
 // alert
 import { showAlert } from './alerts';
-import { async } from 'q';
 
-export const updateData = async (name, email) => {
-  // photo = 'https://bit.ly/2oa8ScE'
+export const updateData = async form => {
   try {
     const res = await axios({
       method: 'PATCH',
       url: 'http://localhost:3000/api/v1/users/updateMe',
-      data: {
-        name: name,
-        email: email
-        // photo: photo
-      }
+      data: form
     });
     if (res.data.status === 'success') {
       showAlert('success', 'Data updated successfully!');

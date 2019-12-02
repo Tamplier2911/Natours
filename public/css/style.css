@@ -1613,3 +1613,16 @@ body {
   width: 6rem;
   white-space: nowrap;
 }
+
+.fileInput {
+  display: none;
+}
+
+.fileInputLabel {
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s, color 0.2s;
+  padding: 0.2rem 1rem;
+
+  border-bottom: 0.1rem #55c57a solid;
+  color: #55c57a;
+}

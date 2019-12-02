@@ -30,7 +30,7 @@ block content
                 div.user-view__form-container
                     h2.heading-secondary.ma-bt-md Your account settings
                     //- WITHOUT API - Using Traditional Action / Method
-                    //- form.form.form-user-data(action="/submit-user-data" method="POST")
+                    //- form.form.form-user-data(action="/submit-user-data" method="POST" enctype='multipart/form-data')
                     form.form.form-user-data
                         div.form__group
                             label.form__label(for='name') Name
@@ -42,8 +42,9 @@ block content
                             //- input#emailUpdate.form__input(name="email" type='email', value=`${user.email}`, required)
                         div.form__group.form__photo-upload
                             img.form__user-photo(src=`/img/users/${user.photo}`, alt='User photo')
-                            //- img.form__user-photo(src=`${user.photo}`, alt=`${user.name} photo`)
-                            a.btn-text(href='') Choose new photo
+                            label.btn-text.fileInputLabel(for="photoUpdate") Choose new photo
+                            input#photoUpdate.fileInput(type="file" accept="image/*" name="photo")
+                            //- a.btn-text(href='') Choose new photo
                         div.form__group.right
                             button.btn.btn--small.btn--green Save settings
                 div.line &nbsp;
