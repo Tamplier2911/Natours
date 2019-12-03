@@ -1,3 +1,6 @@
+const multer = require('multer');
+const sharp = require('sharp');
+
 const Tour = require('../models/tourModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -10,6 +13,70 @@ const {
   updateOne,
   deleteOne
 } = require('./handlerFactory');
+
+// MULTIPLE IMAGES PROCESSING CONFIGURATION
+
+// storage properties - SAVING IN MEMORY BUFFER
+const multerStorage = multer.memoryStorage();
+
+// filter rpoperties. Is file image?
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('File must be an image.', 400), false);
+  }
+};
+
+// user properties for upload
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
+
+// Phtoto upload middleware for /updateMe route
+exports.uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 }
+]);
+
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+  if (!req.files.imageCover || !req.files.images) next();
+
+  // Processing coverImage
+
+  // creating filename for cover image
+  const imageCoverFilename = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${imageCoverFilename}`);
+
+  // function factory will update entire tour using req.body - lets use that
+  req.body.imageCover = imageCoverFilename;
+
+  // creating empty array for images, which we going fill through iterations
+  req.body.images = [];
+
+  // Processing images array, returning array of promises
+  const promisesArray = await req.files.images.map(async (image, i) => {
+    const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+    await sharp(image.buffer)
+      .resize(2000, 1333)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`public/img/tours/${filename}`);
+    req.body.images.push(filename);
+  });
+
+  // awaiting for array of all promises to be resolved
+  await Promise.all(promisesArray);
+
+  // move to next middleware
+  next();
+});
 
 // 127.0.0.1:3000/api/v1/tours?limit=5&sort=-ratingsAverage,price&price[lt]=1000
 exports.aliasTopTours = (req, res, next) => {
@@ -156,7 +223,7 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
   });
 });
 
-// Agregation Pipeline - calculate disnce from certain point to all tour start points
+// Agregation Pipeline - calculate distance from certain point to all tour start points
 exports.getDistance = catchAsync(async (req, res, next) => {
   const { latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');
