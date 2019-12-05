@@ -232,8 +232,11 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     */
 
     try {
+      // create instance of email with current user and reset url
       const sendEmail = new Email(currentUser, resetURL);
-      await sendEmail.sendReset();
+
+      // perform password reset method on email instance
+      await sendEmail.sendPasswordReset();
 
       /*
 
@@ -247,7 +250,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
       res.status(200).json({
         status: 'success',
-        message: 'Token was sent to email!'
+        message: 'Reset token was sent to email!'
       });
     } catch (err) {
       currentUser.passwordResetToken = undefined;
