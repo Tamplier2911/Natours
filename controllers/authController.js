@@ -7,7 +7,11 @@ const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-const sendEmail = require('../utils/email');
+// new email class
+const Email = require('../utils/email');
+
+// old email function
+// const sendEmail = require('../utils/email');
 
 const signToken = id => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -56,6 +60,17 @@ exports.signup = catchAsync(async (req, res, next) => {
     // passwordChangedAt: req.body.passwordChangedAt,
     // role: req.body.role
   });
+
+  // defining url
+  const url = `${req.protocol}://${req.get('host')}/user/${
+    newUser.name.split(' ')[0]
+  }`;
+  // creating instance of Email with current user and url
+  const sendEmail = new Email(newUser, url);
+  // sending emal
+  await sendEmail.sendWelcome();
+
+  // await new Email(newUser, url).sendWelcome();
 
   createSendToken(newUser, 201, res);
 });
@@ -205,6 +220,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
       'host'
     )}/api/v1/users/resetPassword/${resetToken}`;
 
+    /*
+
     const message = `
     Your email was requested for password reset. 
     If this wasn't you - just ignore this message.
@@ -212,12 +229,21 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     Else send new password and password confirm to - 
     ${resetURL}`;
 
+    */
+
     try {
+      const sendEmail = new Email(currentUser, resetURL);
+      await sendEmail.sendReset();
+
+      /*
+
       await sendEmail({
         email: req.body.email,
         subject: 'Your password reset token (valid for 10 min)',
         message: message
       });
+
+      */
 
       res.status(200).json({
         status: 'success',

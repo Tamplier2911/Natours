@@ -28,6 +28,7 @@ router.get('/signup', getSignupForm);
 
 // user page
 router.get('/user/:name', protect, getUser);
+// router.get('/user', protect, getUser);
 
 /*
 
