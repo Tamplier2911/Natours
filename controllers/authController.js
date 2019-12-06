@@ -62,9 +62,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 
   // defining url
-  const url = `${req.protocol}://${req.get('host')}/user/${
-    newUser.name.split(' ')[0]
-  }`;
+  const url = `${req.protocol}://${req.get('host')}/user`;
   // creating instance of Email with current user and url
   const sendEmail = new Email(newUser, url);
   // sending emal
@@ -215,10 +213,16 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     // Saving all changes from this.resetToken this.tokenExpires, deactivate all validators
     await currentUser.save({ validateBeforeSave: false });
 
+    /*
+
     // Send token as an email.
     const resetURL = `${req.protocol}://${req.get(
       'host'
     )}/api/v1/users/resetPassword/${resetToken}`;
+
+    */
+
+    const url = `${req.protocol}://${req.get('host')}/reset`;
 
     /*
 
@@ -233,7 +237,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
     try {
       // create instance of email with current user and reset url
-      const sendEmail = new Email(currentUser, resetURL);
+      const sendEmail = new Email(currentUser, url, { resetToken: resetToken });
 
       // perform password reset method on email instance
       await sendEmail.sendPasswordReset();

@@ -1,6 +1,8 @@
 const express = require('express');
 
 const {
+  getPasswordReset,
+  getPasswordForgot,
   getOverview,
   getTour,
   getLoginForm,
@@ -12,6 +14,12 @@ const {
 const { isLoggedIn, protect } = require('../controllers/authController');
 
 const router = express.Router();
+
+// password forgot
+router.get('/forgot', getPasswordForgot);
+
+// password reset route
+router.get('/reset', getPasswordReset);
 
 // render user menu in header if logged in else | login signup buttons
 router.use(isLoggedIn);
@@ -27,8 +35,7 @@ router.get('/login', getLoginForm);
 router.get('/signup', getSignupForm);
 
 // user page
-router.get('/user/:name', protect, getUser);
-// router.get('/user', protect, getUser);
+router.get('/user', protect, getUser);
 
 /*
 

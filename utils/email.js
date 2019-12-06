@@ -5,11 +5,12 @@ const htmlToText = require('html-to-text');
 // new Email(user, url).sendWelcome();
 
 module.exports = class Email {
-  constructor(user, url) {
+  constructor(user, url, data) {
     this.from = `Artem Nikolaiev <${process.env.EMAIL_FROM}>`;
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
+    this.data = data;
   }
 
   _createNewTransport() {
@@ -36,6 +37,7 @@ module.exports = class Email {
       {
         firstName: this.firstName,
         url: this.url,
+        data: this.data,
         subject: subject
       }
     );

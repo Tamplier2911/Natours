@@ -1626,3 +1626,60 @@ body {
   border-bottom: 0.1rem #55c57a solid;
   color: #55c57a;
 }
+
+.form__group--login {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.login {
+  margin-right: auto;
+}
+
+.passwordForgot:link,
+.passwordForgot:visited {
+  text-decoration: none;
+  font-size: 1.6rem;
+  color: #333;
+  padding-left: 1rem;
+  transition: color 0.3s;
+}
+
+.passwordForgot:hover,
+.passwordForgot:active {
+  color: #55c57a;
+}
+
+.passwordForgotDesc {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+@media only screen and (max-width: 520px) {
+  .passwordForgot:link,
+  .passwordForgot:visited {
+    margin-top: 1rem;
+  }
+  .form__group--login {
+    justify-content: center;
+  }
+  .login {
+    margin-right: 0;
+  }
+}
+
+@media only screen and (max-width: 380px) {
+  .passwordForgot:link,
+  .passwordForgot:visited {
+    margin-top: 0rem;
+  }
+}
+
+@media only screen and (max-width: 344px) {
+  .passwordForgot:link,
+  .passwordForgot:visited {
+    margin-top: 1rem;
+  }
+}

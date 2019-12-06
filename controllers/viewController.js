@@ -60,6 +60,19 @@ exports.getSignupForm = (req, res) => {
   });
 };
 
+// get forgot password form
+exports.getPasswordForgot = (req, res) => {
+  res.status(200).render('passwordForgotForm', {
+    title: 'Renew password'
+  });
+};
+
+// get reset password form
+exports.getPasswordReset = (req, res) => {
+  res.status(200).render('passwordResetForm', {
+    title: 'Reset password'
+  });
+};
 /*
 
 // update user data using traditional form methods

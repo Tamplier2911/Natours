@@ -82,7 +82,7 @@ exports.uploadUserPhoto = upload.single('photo');
 
 // Photo resizing and conversion
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
-  if (!req.file) next();
+  if (!req.file) return next();
 
   req.file.filename = `user-${req.user._id}-${Date.now()}.jpeg`;
 

@@ -1,14 +1,19 @@
 /* eslint-disable */
 
+// axios
 import axios from 'axios';
 
+// alerts
 import { showAlert } from './alerts';
+
+// address
+import { address } from './address';
 
 export const signup = async (name, email, password, passwordConfirm) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://localhost:3000/api/v1/users/signup',
+      url: `${address}/api/v1/users/signup`,
       data: {
         name: name,
         email: email,

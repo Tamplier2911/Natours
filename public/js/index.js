@@ -7,7 +7,7 @@ import '@babel/polyfill';
 import { displayMap } from './mapbox';
 
 // login / signup
-import { login, logout } from './login';
+import { login, logout, passwordForgot, passwordReset } from './login';
 import { signup } from './signup';
 
 // update user data
@@ -25,6 +25,8 @@ const loginForm = document.querySelector('#loginForm');
 const signupForm = document.querySelector('#signupForm');
 const updateUserDataForm = document.querySelector('.form-user-data');
 const updateUserPasswordForm = document.querySelector('.form-user-settings');
+const passwordForgotForm = document.querySelector('#passwordForgotForm');
+const passwordResetForm = document.querySelector('#passwordResetForm');
 
 // get logout button
 const logoutButton = document.querySelector('.nav__el--logout');
@@ -83,7 +85,9 @@ if (updateUserDataForm) {
     const form = new FormData();
     form.append('name', name);
     form.append('email', email);
-    form.append('photo', photo);
+    if (photo) {
+      form.append('photo', photo);
+    }
 
     updateData(form);
   });
@@ -112,6 +116,28 @@ if (updateUserPasswordForm) {
     passwordConfirm.value = '';
 
     */
+  });
+}
+
+if (passwordForgotForm) {
+  passwordForgotForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const email = document.querySelector('#passwordForgotEmail').value;
+
+    passwordForgot(email);
+  });
+}
+
+if (passwordResetForm) {
+  passwordResetForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const token = document.querySelector('#passwordResetToken').value;
+    const password = document.querySelector('#newPassword').value;
+    const passwordConfirm = document.querySelector('#newPasswordConfirm').value;
+
+    passwordReset(token, password, passwordConfirm);
   });
 }
 

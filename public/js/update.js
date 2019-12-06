@@ -6,11 +6,14 @@ import axios from 'axios';
 // alert
 import { showAlert } from './alerts';
 
+// address
+import { address } from './address';
+
 export const updateData = async form => {
   try {
     const res = await axios({
       method: 'PATCH',
-      url: 'http://localhost:3000/api/v1/users/updateMe',
+      url: `${address}/api/v1/users/updateMe`,
       data: form
     });
     if (res.data.status === 'success') {
@@ -19,6 +22,7 @@ export const updateData = async form => {
     }
   } catch (err) {
     showAlert('error', err.response.data.message);
+    console.log(err);
   }
 };
 
@@ -30,7 +34,7 @@ export const updatePassword = async (
   try {
     const res = await axios({
       method: 'PATCH',
-      url: 'http://localhost:3000/api/v1/users/updateMyPassword',
+      url: `${address}/api/v1/users/updateMyPassword`,
       data: {
         passwordCurrent: password,
         newPassword: newPassword,
