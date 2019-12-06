@@ -70,6 +70,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   // await new Email(newUser, url).sendWelcome();
 
+  // create and send jwt
   createSendToken(newUser, 201, res);
 });
 
