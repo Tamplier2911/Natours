@@ -1,6 +1,7 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const catchAsync = require('../utils/catchAsync');
 const Tour = require('../models/tourModel');
+const Booking = require('../models/bookingModel');
 const AppError = require('../utils/appError');
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
@@ -16,7 +17,11 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     // payment went successfully
-    success_url: `${req.protocol}://${req.get('host')}/`,
+    // success_url: `${req.protocol}://${req.get('host')}/`,
+    // TEST - NOT SECURE
+    success_url: `${req.protocol}://${req.get('host')}/?tour=${
+      req.params.tourID
+    }&user=${req.user.id}&price=${tour.price}`,
     // payment was declined
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
     // users email
@@ -43,4 +48,17 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
       session: session
     }
   });
+});
+
+// create Booking once checkout went successful, redirect to safe root URL
+// do that process again, but now without query strings so return root URL
+exports.createBookingCheckout = catchAsync(async (req, res, next) => {
+  // TEMPORARY SOLUTION - UNSAFE
+  const { tour, user, price } = req.query;
+  if (!tour && !user && !price) return next();
+
+  await Booking.create({ tour: tour, user: user, price: price });
+  res.redirect(req.originalUrl.split('?')[0]);
+
+  // return next();
 });
