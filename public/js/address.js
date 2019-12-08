@@ -1,6 +1,9 @@
 /* eslint-disable */
 
+// SERVER SIDE
 // `${req.protocol}://${req.get('host')}/me`;
+
+// FRONT SIDE
 const url = window.location.href;
 const arr = url.split('/');
 // let protocol = arr[0];

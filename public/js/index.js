@@ -13,6 +13,9 @@ import { signup } from './signup';
 // update user data
 import { updateData, updatePassword } from './update';
 
+// checkout page
+import { bookTour } from './stripe';
+
 console.log('Parcel bundler.');
 
 // DOM ELEMENTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -27,6 +30,9 @@ const updateUserDataForm = document.querySelector('.form-user-data');
 const updateUserPasswordForm = document.querySelector('.form-user-settings');
 const passwordForgotForm = document.querySelector('#passwordForgotForm');
 const passwordResetForm = document.querySelector('#passwordResetForm');
+
+// get book tour button
+const bookTourButton = document.querySelector('#bookTour');
 
 // get logout button
 const logoutButton = document.querySelector('.nav__el--logout');
@@ -138,6 +144,14 @@ if (passwordResetForm) {
     const passwordConfirm = document.querySelector('#newPasswordConfirm').value;
 
     passwordReset(token, password, passwordConfirm);
+  });
+}
+
+if (bookTourButton) {
+  bookTourButton.addEventListener('click', e => {
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
   });
 }
 

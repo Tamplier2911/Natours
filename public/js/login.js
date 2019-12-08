@@ -8,7 +8,6 @@ import { showAlert } from './alerts';
 
 // address
 import { address } from './address';
-import { async } from 'q';
 
 export const login = async (email, password) => {
   try {
