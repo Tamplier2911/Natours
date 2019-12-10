@@ -158,6 +158,26 @@ if (bookTourButton) {
 // Header functionality
 const menuCheckbox = document.querySelector('.header__check');
 const header = document.querySelector('.header');
+const navUser = document.querySelector('.nav--user');
 menuCheckbox.addEventListener('change', () => {
   header.classList.toggle('headerHeight');
+  if (navUser.style.display === 'grid') {
+    navUser.style.display = 'none';
+  } else {
+    navUser.style.display = 'grid';
+  }
 });
+
+window.onresize = e => {
+  if (
+    (e.target.innerWidth > 690 && navUser.style.display === 'grid') ||
+    (e.target.innerWidth > 690 && navUser.style.display === 'none')
+  ) {
+    header.classList.remove('headerHeight');
+    navUser.style.display = 'flex';
+    menuCheckbox.checked = false;
+  }
+  if (e.target.innerWidth < 691 && navUser.style.display === 'flex') {
+    navUser.style.display = 'none';
+  }
+};
