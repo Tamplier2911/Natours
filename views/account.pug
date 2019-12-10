@@ -13,8 +13,8 @@ block content
         div.user-view
             nav.user-view__menu
                 ul.side-nav
-                    +menuItem("#", "settings", "Settings", true)
-                    +menuItem("#", "briefcase", "My bookings", false)
+                    +menuItem("/user", "settings", "Settings", true)
+                    +menuItem("/bookings", "briefcase", "My bookings", false)
                     +menuItem("#", "star", "My reviews", false)
                     +menuItem("#", "credit-card", "Billing", false)
                 - if (user.role === 'admin')

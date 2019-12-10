@@ -7,7 +7,8 @@ const {
   getTour,
   getLoginForm,
   getSignupForm,
-  getUser
+  getUser,
+  getBookings
   // updateUserData
 } = require('../controllers/viewController');
 
@@ -26,7 +27,7 @@ router.get('/reset', getPasswordReset);
 router.use(isLoggedIn);
 
 // get all tours
-// TEST
+// UNSAFE TEMPORARY MIDDLEWARE - createBookingCheckout
 router.get('/', createBookingCheckout, getOverview);
 // router.get('/', getOverview);
 
@@ -39,6 +40,9 @@ router.get('/signup', getSignupForm);
 
 // user page
 router.get('/user', protect, getUser);
+
+// user bookings
+router.get('/bookings', protect, getBookings);
 
 /*
 

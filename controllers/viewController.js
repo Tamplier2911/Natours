@@ -1,5 +1,6 @@
 const Tour = require('../models/tourModel');
 // const User = require('../models/userModel');
+const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
@@ -45,6 +46,26 @@ exports.getUser = (req, res, next) => {
     title: 'Your account'
   });
 };
+
+// get user bookings
+exports.getBookings = catchAsync(async (req, res, next) => {
+  const { id } = req.user;
+
+  // find all bookings by current user id
+  const bookings = await Booking.find({ user: id });
+  // return tour id from each booking as array
+  const tourIds = bookings.map(booking => booking.tour.id);
+
+  // find tours related to returned IDs, passing array of IDs
+  const tours = await Tour.find({ _id: { $in: tourIds } });
+
+  // return found tours in order to display them to user using overview template
+  // can implement delete booking functionality here
+  res.status(200).render('overview', {
+    title: 'Your bookings',
+    tours: tours
+  });
+});
 
 // get login form
 exports.getLoginForm = (req, res) => {
