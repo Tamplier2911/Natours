@@ -180,6 +180,7 @@ exports.isLoggedIn = async (req, res, next) => {
       }
 
       // if we get here - We have a logged in user
+      req.user = currentUser;
       res.locals.user = currentUser;
       return next();
     } catch (err) {

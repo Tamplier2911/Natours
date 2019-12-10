@@ -100,7 +100,10 @@ block content
             div.cta__content
                 h2.heading-secondary.heading-secondary-cta What are you waiting for?
                 p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
-                if user
+                if user && !booked
                     button#bookTour.btn.btn--green.span-all-rows(data-tour-id=`${tour._id}`) Book tour now!
+                else if user && booked
+                    a.btn.btn--green.span-all-rows(href='/bookings') Already Booked
                 else
                     a.btn.btn--green.span-all-rows(href='/login') Login
+                
