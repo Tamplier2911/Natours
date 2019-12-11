@@ -9,4 +9,5 @@ Study Case for Node.js, modeling API architecture, server-side rendering with Pu
 # Deployment
 
 App is currently still in development state.
-Prview of latest build is up and running at: https://natours-live-s.herokuapp.com/
+
+Preview of latest build is up and running at: https://natours-live-s.herokuapp.com/
