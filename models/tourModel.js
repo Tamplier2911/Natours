@@ -185,7 +185,7 @@ tourSchema.pre(/^find/, function(next) {
 });
 
 tourSchema.post(/^find/, function(docs, next) {
-  this.end = Date.now();
+  // this.end = Date.now();
   // console.log((this.end - this.start) / 1000);
   next();
 });

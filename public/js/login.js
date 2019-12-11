@@ -8,6 +8,8 @@ import { showAlert } from './alerts';
 
 // address
 import { address } from './address';
+// could also use just /api/v1/users/login
+// if api and app are hosted on same url
 
 export const login = async (email, password) => {
   try {

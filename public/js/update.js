@@ -22,7 +22,7 @@ export const updateData = async form => {
     }
   } catch (err) {
     showAlert('error', err.response.data.message);
-    console.log(err);
+    // console.log(err);
   }
 };
 
