@@ -16,7 +16,7 @@ import { updateData, updatePassword } from './update';
 // checkout page
 import { bookTour } from './stripe';
 
-console.log('Parcel bundler.');
+// console.log('Parcel bundler.');
 
 // DOM ELEMENTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
