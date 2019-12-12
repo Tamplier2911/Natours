@@ -21,6 +21,9 @@ const cookieParser = require('cookie-parser');
 // text compression
 const compression = require('compression');
 
+// cross origin request sharing
+const cors = require('cors');
+
 // error handlers
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -43,6 +46,22 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // GLOBAL MIDDLEWARES
+
+// implemeting cross-origin resource sharing for simple-requests on all routes
+// Access-Control-Allow-Origin
+app.use(cors());
+
+// implementing simple request cross-origin for specific route
+// app.use(cors({ origin: 'https://natours-live-s.herokuapp.com/' }));
+
+// respond to OPTIONS request with Access-Control-Allow-Origin header
+// implementing non-simple request cross-origin for all routes
+app.options('*', cors());
+
+// respond to OPTIONS with Access-Control-Allow-Origin only to specific route
+// implementing non-simple request cross-origin for specific route
+// preflight phase can be done ONLY on this route
+// app.options('/api/v1/tours/:id', cors());
 
 // serving static files
 // app.use(express.static(`${__dirname}/public`));

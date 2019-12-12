@@ -28,7 +28,7 @@ mongoose
 // SERVER
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
-  console.log(`App is running on http://localhost:${port}/ ...`);
+  console.log(`App is running on https://natours-live-s.herokuapp.com/...`);
 });
 
 process.on('unhandledRejection', err => {
