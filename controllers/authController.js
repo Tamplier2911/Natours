@@ -19,7 +19,7 @@ const signToken = id => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
 
   const cookieOptions = {
@@ -30,7 +30,9 @@ const createSendToken = (user, statusCode, res) => {
     httpOnly: true
   };
 
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  if (req.secure || req.headers['x-forwarded-proto'] === 'https')
+    cookieOptions.secure = true;
 
   res.cookie('jwt', token, cookieOptions);
 
@@ -71,7 +73,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   // await new Email(newUser, url).sendWelcome();
 
   // create and send jwt
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201, req, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -92,7 +94,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // create sign jwt - sent jwt token
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 // sending empty JWT in order to rewrite one that currently in browser and perform logout
@@ -296,7 +298,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // Update passwordChangedAt property ( inside of userModel as pre middleware)
 
   // Log the user in, send JWT
-  createSendToken(currentUser, 200, res);
+  createSendToken(currentUser, 200, req, res);
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -321,5 +323,5 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await currentUser.save();
 
   // Log in user with new JWT.
-  createSendToken(currentUser, 200, res);
+  createSendToken(currentUser, 200, req, res);
 });
