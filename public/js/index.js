@@ -158,7 +158,7 @@ if (bookTourButton) {
   });
 }
 
-// Handling inner body alerts
+// Handling body-dataset reusable alerts
 const alertMessage = document.querySelector('body').dataset.alert;
 if (alertMessage) {
   showAlert('success', alertMessage, 10);

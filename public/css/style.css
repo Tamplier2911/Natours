@@ -1683,3 +1683,7 @@ body {
     margin-top: 1rem;
   }
 }
+
+.cta__test {
+  font-size: 1.6rem;
+}
