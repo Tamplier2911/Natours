@@ -12,7 +12,7 @@ const {
   // updateUserData
 } = require('../controllers/viewController');
 
-const { createBookingCheckout } = require('../controllers/bookingController');
+// const { createBookingCheckout } = require('../controllers/bookingController');
 const { isLoggedIn, protect } = require('../controllers/authController');
 
 const router = express.Router();
@@ -27,9 +27,10 @@ router.get('/reset', getPasswordReset);
 router.use(isLoggedIn);
 
 // get all tours
+router.get('/', getOverview);
+
 // UNSAFE TEMPORARY MIDDLEWARE - createBookingCheckout
-router.get('/', createBookingCheckout, getOverview);
-// router.get('/', getOverview);
+// router.get('/', createBookingCheckout, getOverview);
 
 // get single tour
 router.get('/tour/:slug', getTour);

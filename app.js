@@ -35,6 +35,9 @@ const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 
+// webhook handler
+const { getWebhookCheckout } = require('./controllers/bookingController');
+
 // our app instance
 const app = express();
 
@@ -84,7 +87,11 @@ const limiter = rateLimit({
 
 app.use('/api', limiter);
 
-// body parser (parse data from body into req.body)
+// parse body in raw format
+// requires data in raw format
+app.post('/webhook-checkout', express.raw(), getWebhookCheckout);
+
+// body parser (parse data from body into req.body as JSON)
 app.use(express.json({ limit: '10kb' }));
 // parse data from urlencoded FORM
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
