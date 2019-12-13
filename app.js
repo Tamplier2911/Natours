@@ -15,6 +15,9 @@ const xss = require('xss-clean');
 // avoiding parameter polution
 const hpp = require('hpp');
 
+// body parser
+const bodyParser = require('body-parser');
+
 // cookie parser middleware
 const cookieParser = require('cookie-parser');
 
@@ -89,7 +92,12 @@ app.use('/api', limiter);
 
 // parse body in raw format
 // requires data in raw format
-app.post('/webhook-checkout', express.raw(), getWebhookCheckout);
+// app.post('/webhook-checkout', express.raw(), getWebhookCheckout);
+app.post(
+  '/webhook-checkout',
+  bodyParser.raw({ type: 'application/json' }),
+  getWebhookCheckout
+);
 
 // body parser (parse data from body into req.body as JSON)
 app.use(express.json({ limit: '10kb' }));
