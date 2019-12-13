@@ -4,6 +4,17 @@ const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
+// middleware that listens for query string with alert
+// adding alert to locals & learning query
+exports.alerts = (req, res, next) => {
+  const { alert } = req.query;
+  if (alert === 'booking') {
+    res.locals.alert =
+      'Your booking was successful! Booked tour will show up here shortly! ';
+  }
+  next();
+};
+
 // get all tours
 exports.getOverview = catchAsync(async (req, res, next) => {
   // Get tour data from collection
@@ -98,6 +109,7 @@ exports.getPasswordReset = (req, res) => {
     title: 'Reset password'
   });
 };
+
 /*
 
 // update user data using traditional form methods

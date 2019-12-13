@@ -3,6 +3,9 @@
 // pollyfil
 import '@babel/polyfill';
 
+// alerts
+import { showAlert } from './alerts';
+
 // map
 import { displayMap } from './mapbox';
 
@@ -153,6 +156,12 @@ if (bookTourButton) {
     const { tourId } = e.target.dataset;
     bookTour(tourId);
   });
+}
+
+// Handling inner body alerts
+const alertMessage = document.querySelector('body').dataset.alert;
+if (alertMessage) {
+  showAlert('success', alertMessage, 10);
 }
 
 // Header functionality

@@ -8,7 +8,8 @@ const {
   getLoginForm,
   getSignupForm,
   getUser,
-  getBookings
+  getBookings,
+  alerts
   // updateUserData
 } = require('../controllers/viewController');
 
@@ -16,6 +17,9 @@ const {
 const { isLoggedIn, protect } = require('../controllers/authController');
 
 const router = express.Router();
+
+// middleware that runs for each req that going to pick allert from query
+router.use(alerts);
 
 // password forgot
 router.get('/forgot', getPasswordForgot);
