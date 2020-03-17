@@ -48,7 +48,7 @@ module.exports = class Email {
       }
     );
 
-    // Define emial options
+    // Define email options
     const mailOptions = {
       from: this.from,
       to: this.to,
